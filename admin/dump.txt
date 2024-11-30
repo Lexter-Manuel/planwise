@@ -1,0 +1,31 @@
+$userid = $_POST['userID'] ?? 0;
+    $fname = mysqli_real_escape_string($conn, $_POST['fname']);
+    $mname = mysqli_real_escape_string($conn, $_POST['mname']);
+    $lname = mysqli_real_escape_string($conn, $_POST['lname']);
+    $username = mysqli_real_escape_string($conn, $_POST['username']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $role = mysqli_real_escape_string($conn, $_POST['role']);
+    $birthday = mysqli_real_escape_string($conn, $_POST['birthday']);
+    $contact_number = mysqli_real_escape_string($conn, $_POST['contact_number']);
+    $gender = mysqli_real_escape_string($conn, $_POST['gender']);
+
+    if ($userid == 0) {
+        // Insert new user
+        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+        $sql = "INSERT INTO users (fname, mname, lname, username, password, email, role, birthday, contact_number, gender)
+                VALUES ('$fname', '$mname', '$lname', '$username', '$hashed_password', '$email', '$role', '$birthday', '$contact_number', '$gender')";
+    } else {
+        // Update existing user
+        $hashed_password = $password !== '' ? "password = '" . password_hash($password, PASSWORD_BCRYPT) . "'," : '';
+        $sql = "UPDATE users 
+                SET fname = '$fname', mname = '$mname', lname = '$lname', username = '$username', $hashed_password 
+                    email = '$email', role = '$role', birthday = '$birthday', contact_number = '$contact_number', gender = '$gender'
+                WHERE userID = '$userid'";
+    }
+
+    if (mysqli_query($conn, $sql)) {
+        echo "User saved successfully.";
+    } else {
+        echo "Error: " . mysqli_error($conn);
+    }

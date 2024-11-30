@@ -1,0 +1,5 @@
+{
+    "name": "phpmailer/phpmailer",
+    "type": "library",
+    "require": {}
+}
